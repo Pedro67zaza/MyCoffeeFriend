@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Coffee Friend - Admin Panel</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 80px;
+            background-color: #261615; /* Dark brown background */
+            padding: 1rem 0.8rem;
+            transition: width 0.3s ease; /* Smoother transition */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden; /* Hide overflowing content */
+        }
+
+        .sidebar.active {
+            width: 250px;
+        }
+
+        .sidebar #btn {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .sidebar.active #btn {
+            left: 90%;
+        }
+
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .sidebar.active .logo {
+            opacity: 1;
+        }
+
+        .sidebar .logo i {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+
+        .sidebar .user {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.active .user {
+            opacity: 1;
+        }
+
+        .sidebar .user img {
+            width: 50px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-right: 0.8rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 0.5rem 0;
+            position: relative;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: beige;
+            color: black;
+        }
+        .sidebar ul li a.active {
+            background-color: rgba(255, 255, 255, 0.1); /* Lighter background on hover/active */
+        }
+
+        .sidebar ul li a i {
+            min-width: 40px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .sidebar .nav-item {
+            margin-left: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.active .nav-item {
+            opacity: 1;
+        }
+
+        .sidebar .tooltip {
+            position: absolute;
+            left: 110%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .sidebar li:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar.active .tooltip {
+            display: none;
+        }
+
+        .main-content iframe {
+            height: 100vh;
+            width: 100vh;
+            border: none;
+            flex-grow: 1; /* Take up remaining space */
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            background-color: #f4f4f4; /* Light background */
+            margin-left: 80px; /* Initial margin based on sidebar width */
+            transition: 0.3s ease;
+            display: flex;
+            height: 100vh;
+            width: auto;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar.active ~ .main-content {
+            margin-left: 250px;
+            width: calc(100vw - 250px);
+        }
+
+        .main-content h1 {
+            margin-bottom: 1rem;
+        }
+        #containFrame {
+            height: 100%;
+            width: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="top">
+            <div class="logo">
+                <i class="bx bxl-codepen"></i>
+                <span>My Coffee Friend</span>
+            </div>
+            <i class="bx bx-menu" id="btn" aria-label="Toggle Navigation"></i>
+        </div>
+        <div class="user">
+            <img src="admin.png" alt="Admin Avatar">
+            <span>Admin</span>
+        </div>
+        <ul>
+            <li>
+                <a href="#" class="active" data-page="dashboard.php">
+                    <i class="bx bxs-grid-alt"></i>
+                    <span class="nav-item">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="#" data-page="product.php">
+                    <i class="bx bx-food-menu"></i>
+                    <span class="nav-item">Products</span>
+                </a>
+                <span class="tooltip">Products</span>
+            </li>
+             <li>
+                <a href="#" data-page="application.php">
+                    <i class="bx bx-paper-plane"></i>
+                    <span class="nav-item">Applications</span>
+                </a>
+                <span class="tooltip">Applications</span>
+            </li>
+             <li>
+                <a href="#" data-page="feedback.php">
+                    <i class="bx bx-user-voice"></i>
+                    <span class="nav-item">Feedback</span>
+                </a>
+                <span class="tooltip">Feedback</span>
+            </li>
+            <li>
+                <a href="#" data-page="search.php">
+                    <i class="bx bx-search"></i>
+                    <span class="nav-item">Advanced Search</span>
+                </a>
+                <span class="tooltip">Advanced Search</span>
+            </li>
+            <li>
+                <a href="#" data-page="users.php">
+                    <i class="bx bx-user"></i>
+                    <span class="nav-item">Users</span>
+                </a>
+                <span class="tooltip">Users</span>
+            </li>
+            <li>
+                <a href="logout.php" id="logoutLink">
+                    <i class="bx bxs-door-open"></i>
+                    <span class="nav-item">Logout</span>
+                </a>
+                <span class="tooltip">Logout</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <iframe id="contentFrame" src="dashboard.php"></iframe>
+    </div>
+
+    <script>
+        const btn = document.getElementById('btn');
+        const sidebar = document.querySelector('.sidebar');
+        const navLinks = document.querySelectorAll('.sidebar ul li a');
+        const contentFrame = document.getElementById('contentFrame');
+
+        btn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                navLinks.forEach(navLink => navLink.classList.remove('active')); // Remove from all
+                link.classList.add('active'); // Add to the clicked one.
+
+                const page = link.getAttribute('data-page');
+                contentFrame.src = page;
+            });
+        });
+
+        document.getElementById('logoutLink').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default iframe loading
+            window.location.href = "logout.php"; // Redirect the full page
+        });
+
+
+        
+    </script>
+</body>
+</html>
